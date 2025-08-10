@@ -187,3 +187,27 @@ body {
     background-color: #EBECCC; /* Pistachio */
     width: 100%;
 }
+
+/* Responsive fixes for navbar on small screens */
+@media (max-width: 480px) {
+    .navbar {
+        flex-wrap: wrap; /* allow navbar to wrap items */
+        padding: 10px 15px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap; /* allow links to wrap to next line */
+        justify-content: center; /* center links */
+        gap: 15px;
+        width: 100%; /* take full width */
+        margin-top: 10px;
+    }
+
+        .nav-links a {
+            font-size: 20px; /* slightly smaller font for small screens */
+        }
+
+    .logo {
+        height: 50px; /* slightly smaller logo */
+    }
+}
