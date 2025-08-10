@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Feedback Viewer</title>
+    <link rel="stylesheet" href="history.css"> <!-- Reuse your existing CSS -->
+    <style>
+        /* Additional admin-specific styles */
+        .feedback-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .last-updated {
+            text-align: center;
+            font-size: 22px;
+            color: #DCA278;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark"></div>
+
+    <main class="main-content">
+        <h1>User Feedback</h1>
+
+        <div class="last-updated" id="lastUpdated">
+            Last refreshed: Just now
+        </div>
+
+        <div class="feedback-controls">
+            <button onclick="loadFeedbacks()" class="submit-btn">Refresh Now</button>
+            <button onclick="exportFeedbacks()" class="submit-btn">Export as JSON</button>
+            <button onclick="clearFeedbacks()" class="delete-btn">Clear All</button>
+        </div>
+
+        <div id="feedbackList" class="history-entries">
+            <!-- Feedbacks will appear here -->
+        </div>
+    </main>
+
+    <script>
+        // Enhanced feedback functions
+        function loadFeedbacks() {
+            try {
+                const feedbacks = JSON.parse(localStorage.getItem('piggyFeedback')) || [];
+                const container = document.getElementById('feedbackList');
+                const lastUpdated = document.getElementById('lastUpdated');
+
+                // Update timestamp
+                lastUpdated.textContent = `Last refreshed: ${new Date().toLocaleTimeString()}`;
+
+                if (feedbacks.length === 0) {
+                    container.innerHTML = '<p class="no-history">No feedback submissions yet.</p>';
+                    return;
+                }
+
+                // Sort by date (newest first)
+                const sortedFeedbacks = feedbacks.sort((a, b) =>
+                    new Date(b.date) - new Date(a.date)
+                );
+
+                container.innerHTML = sortedFeedbacks.map((fb, index) => `
+                        <div class="history-entry">
+                            <h3>${fb.date || 'Unknown date'}</h3>
+                            <div class="history-stats">
+                                <p><strong>Name:</strong> ${fb.name || 'Anonymous'}</p>
+                                <p><strong>Email:</strong> ${fb.email || 'Not provided'}</p>
+                                <p><strong>Rating:</strong> ${'★'.repeat(fb.rating || 0)}</p>
+                                <p><strong>Message:</strong> ${fb.message || 'No message'}</p>
+                            </div>
+                        </div>
+                    `).join('');
+            } catch (error) {
+                console.error("Error loading feedbacks:", error);
+                alert("Error loading feedbacks. Check console for details.");
+            }
+        }
+
+        function exportFeedbacks() {
+            try {
+                const feedbacks = JSON.parse(localStorage.getItem('piggyFeedback')) || [];
+                if (feedbacks.length === 0) {
+                    alert("No feedback to export!");
+                    return;
+                }
+
+                const blob = new Blob([JSON.stringify(feedbacks, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `piggy-feedbacks-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error("Export failed:", error);
+                alert("Export failed. Check console for details.");
+            }
+        }
+
+        function clearFeedbacks() {
+            if (confirm('⚠️ Delete ALL feedback submissions? This cannot be undone!')) {
+                try {
+                    localStorage.removeItem('piggyFeedback');
+                    loadFeedbacks();
+                    alert("All feedback cleared successfully!");
+                } catch (error) {
+                    console.error("Clear failed:", error);
+                    alert("Clear operation failed. Check console.");
+                }
+            }
+        }
+
+        // Initial load
+        loadFeedbacks();
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadFeedbacks, 30000);
+
+        // Enable keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'r') { // Ctrl+R to refresh
+                e.preventDefault();
+                loadFeedbacks();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="your-piggy-image.png" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jomhuria&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <!-- Watermark -->
+    <div class="watermark"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <img src="your-piggy-image.png" alt="My Piggy Bank" class="logo">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="goal_tracker.html">Goal Tracker</a></li>
+            <li><a href="feedback.html" class="active">Feedback</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="dashboard-title">My Piggy Bank</h1>
+        <p class="section-desc">Tell us your income and expenses, and we'll suggest how much you can save!</p>
+
+        <form class="budget-form" id="budgetForm">
+            <!-- Income -->
+            <div class="form-group">
+                <label class="form-label" for="income">Monthly Income:</label>
+                <input class="form-input" type="number" id="income" placeholder="e.g., 500" required>
+            </div>
+
+            <!-- Currency -->
+            <div class="form-group">
+                <label class="form-label" for="currency">Currency:</label>
+                <select class="form-input" id="currency">
+                    <option value="OMR">Rial (OMR)</option>
+                    <option value="USD">Dollar (USD)</option>
+                    <option value="EUR">Euro (EUR)</option>
+                </select>
+            </div>
+
+            <!-- Essentials -->
+            <h2 class="section-title">Your Essential Expenses</h2>
+            <div id="essentials-container">
+                <div class="expense-group">
+                    <input class="form-input" type="text" placeholder="Expense (e.g., Rent)" required>
+                    <input class="form-input expense-amount" type="number" placeholder="Amount" required>
+                </div>
+            </div>
+            <button type="button" class="btn-add" id="addExpense">+ Add Another Expense</button>
+
+            <!-- Results -->
+            <div class="results-box" id="resultsBox" style="display:none;">
+                <h3 class="results-title">Your Personalized Plan</h3>
+                <div class="results-grid">
+                    <div class="result-category">
+                        <span class="result-name">Total Essentials:</span>
+                        <span class="result-amount" id="totalEssentials">0</span>
+                    </div>
+                    <div class="result-category">
+                        <span class="result-name">Recommended Savings (30%):</span>
+                        <span class="result-amount" id="savingsAmount">0</span>
+                    </div>
+                    <div class="result-category">
+                        <span class="result-name">Left for Fun:</span>
+                        <span class="result-amount" id="funAmount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-main" id="calculateBtn">Calculate My Savings</button>
+            <button type="button" class="btn-main" id="saveBtn" style="display:none; margin-top:15px;">
+                Save & View History
+            </button>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2025 Made by Noor Alrawahi
+    </footer>
+
+    <script>
+        // Add expense fields
+        document.getElementById('addExpense').addEventListener('click', function () {
+            const container = document.getElementById('essentials-container');
+            const newExpense = document.createElement('div');
+            newExpense.className = 'expense-group';
+            newExpense.innerHTML = `
+                    <input class="form-input" type="text" placeholder="Expense (e.g., Food)" required>
+                    <input class="form-input expense-amount" type="number" placeholder="Amount" required>
+                `;
+            container.appendChild(newExpense);
+        });
+
+        // Calculate savings
+        document.getElementById('calculateBtn').addEventListener('click', function () {
+            const income = parseFloat(document.getElementById('income').value);
+            const currency = document.getElementById('currency').value;
+
+            if (isNaN(income) || income <= 0) {
+                alert("Please enter a valid income!");
+                return;
+            }
+
+            // Sum expenses
+            const expenseInputs = document.querySelectorAll('.expense-amount');
+            let totalExpenses = 0;
+            expenseInputs.forEach(input => {
+                totalExpenses += parseFloat(input.value) || 0;
+            });
+
+            if (totalExpenses <= 0) {
+                alert("Please add at least one essential expense!");
+                return;
+            }
+
+            // Calculate remaining
+            const remaining = income - totalExpenses;
+            if (remaining < 0) {
+                alert("Your expenses exceed your income!");
+                return;
+            }
+
+            const savings = remaining * 0.3;
+            const funMoney = remaining - savings;
+
+            // Display results
+            document.getElementById('totalEssentials').textContent = formatCurrency(totalExpenses, currency);
+            document.getElementById('savingsAmount').textContent = formatCurrency(savings, currency);
+            document.getElementById('funAmount').textContent = formatCurrency(funMoney, currency);
+            document.getElementById('resultsBox').style.display = 'block';
+            document.getElementById('saveBtn').style.display = 'block';
+        });
+
+        // Save data
+        document.getElementById('saveBtn').addEventListener('click', function () {
+            const income = parseFloat(document.getElementById('income').value);
+            const currency = document.getElementById('currency').value;
+            const essentials = parseFloat(document.getElementById('totalEssentials').textContent.replace(/[^0-9.]/g, ''));
+            const savings = parseFloat(document.getElementById('savingsAmount').textContent.replace(/[^0-9.]/g, ''));
+            const fun = parseFloat(document.getElementById('funAmount').textContent.replace(/[^0-9.]/g, ''));
+
+            const historyEntry = {
+                date: new Date().toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                income: income,
+                currency: currency,
+                essentials: essentials,
+                savings: savings,
+                fun: fun
+            };
+
+            // Save to history
+            const history = JSON.parse(localStorage.getItem('piggyHistory')) || [];
+            history.push(historyEntry);
+            localStorage.setItem('piggyHistory', JSON.stringify(history));
+
+            // Redirect
+            window.location.href = 'history.html';
+        });
+
+        function formatCurrency(amount, currency) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: currency,
+                minimumFractionDigits: currency === 'OMR' ? 3 : 2
+            }).format(amount);
+        }
+    </script>
+</body>
+</html>

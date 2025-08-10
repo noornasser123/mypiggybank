@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="your-piggy-image.png" />
+    <title>History</title>
+    <link rel="stylesheet" href="history.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Background Watermark -->
+    <div class="watermark"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <img src="your-piggy-image.png" alt="Piggy Logo" class="logo">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="history.html" class="active">History</a></li>
+            <li><a href="goal_tracker.html">Goal Tracker</a></li>
+            <li><a href="feedback.html" class="active">Feedback</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1>Your Savings History</h1>
+
+        <!-- History Entries -->
+        <section class="history-entries" id="historyEntries">
+            <!-- Filled by JavaScript -->
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section">
+            <h2>Savings Progress</h2>
+            <canvas id="spendingChart"></canvas>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 Made by Noor Alrawahi
+    </footer>
+
+    <script src="history.js"></script>
+</body>
+</html>

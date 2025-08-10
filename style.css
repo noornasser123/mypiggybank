@@ -1,0 +1,88 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Jomhuria&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Jomhuria', cursive;
+    background-color: #FFF9E2; /* Ivory */
+    position: relative;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #EBECCC; /* Pistachio */
+    padding: 10px 30px;
+}
+
+.logo {
+    height: 60px;
+    background-color: transparent;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+    .nav-links a {
+        text-decoration: none;
+        color: #DCA278; /* Clay */
+        font-size: 24px;
+    }
+
+/* Main Content */
+.main-content {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+    .main-content h1 {
+        color: #CDD4B1; /* Eucalyptus */
+        font-size: 60px;
+        margin: 20px 0 10px;
+    }
+
+.description {
+    color: #DCA278; /* Clay */
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.brand-image {
+    max-width: 300px;
+    height: auto;
+    background-color: transparent;
+}
+
+.get-started {
+    background-color: #DCA278; /* Clay */
+    color: white;
+    font-family: 'Jomhuria', cursive;
+    font-size: 28px;
+    border: none;
+    padding: 15px 40px;
+    cursor: pointer;
+    border-radius: 10px;
+    letter-spacing: 1px;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 22px;
+    color: #DCA278; /* Clay */
+    background-color: #EBECCC; /* Pistachio */
+    margin-top: 60px;
+}

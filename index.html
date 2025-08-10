@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="your-piggy-image.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#ff69b4" />
+    <title>My Piggy Bank</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- Background Watermark -->
+    <div class="watermark"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <img src="your-piggy-image.png" alt="Piggy Logo" class="logo" />
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="goal_tracker.html">Goal Tracker</a></li>
+            <li><a href="feedback.html" class="active">Feedback</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1>Welcome to My Piggy Bank</h1>
+        <p class="description">
+            Track your income, split it smartly, and save with ease. Plan your money. Spend smart. Save better.
+        </p>
+        <div class="image-container">
+            <img src="your-piggy-image.png" alt="Piggy Brand" class="brand-image" />
+        </div>
+        <button id="get-started" class="get-started">Get Started</button>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2025 Made by Noor Alrawahi
+    </footer>
+
+    <!-- Redirect Script -->
+    <script>
+        document.getElementById("get-started").onclick = function () {
+            window.location.href = "dashboard.html";
+        };
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker
+                    .register('/sw.js')
+                    .then(() => console.log('Service Worker Registered'))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>
